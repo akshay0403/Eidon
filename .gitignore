@@ -1,29 +1,22 @@
-# Byte-compiled / cache
+cat > .gitignore <<'EOF'
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.so
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 .coverage
 htmlcov/
 
-# Packaging/build
 build/
 dist/
 *.egg-info/
 
-# Environments & tooling
 .venv/
 .env
-.python-version
-
-# OS / Editor
 .DS_Store
 .idea/
 .vscode/
 
-# Project local configs (keep your public ones)
+# local-only project config
 eidon.toml
+EOF
