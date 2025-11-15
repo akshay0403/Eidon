@@ -1,7 +1,8 @@
 {
   "projects": [
     {"id": "P-1001", "name": "Onboarding Revamp", "status": "Active", "owner": "Alice", "budget_total": 200000, "spent": 125000},
-    {"id": "P-1002", "name": "Mobile App v2",      "status": "Active", "owner": "Bob",   "budget_total": 180000, "spent":  98000},
-    {"id": "P-1003", "name": "Data Lake",          "status": "Paused", "owner": "Chandra","budget_total": 400000, "spent": 221000}
+    {"id": "P-1003", "name": "Data Lake",          "status": "Paused", "owner": "Chandra","budget_total": 400000, "spent": 221000},
+    { "id": "P-1002", "name": "Web Revamp", "spent": 210000}
+
   ]
 }

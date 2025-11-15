@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "eidon"
-version = "0.1.2"
+version = "0.1.6"
 description = "Eidon CLI and framework"
 readme = "README.md"
 requires-python = ">=3.11"
