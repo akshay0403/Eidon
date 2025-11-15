@@ -54,3 +54,31 @@ help:
 	@echo "make log-demo-info / log-demo-debug - logging demos"
 	@echo "make config-show - print effective config"
 
+.PHONY: testv
+testv:
+\tpython -m unittest discover -v
+
+.PHONY: test-formats
+test-formats:
+\tpython -m unittest discover -s tests -p "test_format_*.py" -v
+
+.PHONY: test testv test-formats coverage coverage-html
+
+test:
+	python -m unittest discover -s tests -p "test_*.py" -q
+
+testv:
+	python -m unittest discover -s tests -p "test_*.py" -v
+
+# already added earlier, but keep if not present:
+test-formats:
+	python -m unittest discover -s tests -p "test_format_*.py" -v
+
+coverage:
+	python -m coverage run -m unittest discover -s tests -p "test_*.py"
+	python -m coverage report
+
+coverage-html:
+	python -m coverage run -m unittest discover -s tests -p "test_*.py"
+	python -m coverage html
+	@echo "Open coverage_html/index.html in your browser."

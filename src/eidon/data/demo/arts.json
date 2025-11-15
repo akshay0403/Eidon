@@ -1,0 +1,6 @@
+{
+  "arts": [
+    {"id": "ART-01", "name": "Digital Commerce ART", "rte": "Priya",  "pm": "Rohan", "projects": ["P-1001","P-1002"]},
+    {"id": "ART-02", "name": "Data Platform ART",    "rte": "Evelyn", "pm": "Marco", "projects": ["P-1003"]}
+  ]
+}

@@ -1,0 +1,13 @@
+[theme]
+# Calm dark theme tuned for projector/Zoom
+primaryColor = "#5B8DEF"
+backgroundColor = "#0F172A"           # slate-900-ish
+secondaryBackgroundColor = "#111827"  # slate-800-ish
+textColor = "#E5E7EB"                 # gray-200
+font = "sans serif"
+
+[client]
+showSidebarNavigation = false
+
+[server]
+fileWatcherType = "watchdog"

@@ -1,15 +1,9 @@
-# Eidon
+# Eidon — Demo Web
 
-Phase 1 scaffold with Python (uv), Makefile tasks, and CI.
+A lightweight Streamlit demo for portfolio → project → sprint → risk walkthroughs.
 
-## Quickstart
+## Quick Start
 
 ```bash
-# From project root
-uv run make setup
-make run       # prints a hello line
-make test      # 1 passing test
-make lint      # Ruff lint
-make typecheck # MyPy
-uv pip install -e .
-uv run eidon --help
+cd ~/Projects/eidon
+uv run python -m eidon demo-web

@@ -1,0 +1,4 @@
+[
+  {"id":"R1","issue":"ISSUE-22","why":"Blocked > 2 days","confidence":82,"action":"Reassign"},
+  {"id":"R2","issue":"ISSUE-77","why":"Scope growth 12%","confidence":68,"action":"Split"}
+]

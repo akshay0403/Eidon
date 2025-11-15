@@ -1,0 +1,7 @@
+{
+  "features": [
+    {"id": "F-2001", "name": "Checkout Refactor",     "state": "Implementing", "wsjf": 24, "story_points": 55, "art_id": "ART-01", "project_id": "P-1002"},
+    {"id": "F-2002", "name": "Push Notifications",    "state": "Ready",        "wsjf": 18, "story_points": 21, "art_id": "ART-01", "project_id": "P-1002"},
+    {"id": "F-3001", "name": "Lakehouse Metadata API","state": "Discovery",    "wsjf": 13, "story_points": 34, "art_id": "ART-02", "project_id": "P-1003"}
+  ]
+}

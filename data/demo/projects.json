@@ -1,0 +1,4 @@
+[
+  {"key":"PRJ1","name":"Apollo","health":87,"milestones":["M1","M2"],"workload":{"alice":6,"bob":9,"chris":4},"recent":[{"type":"Jira","text":"ISSUE-12 moved to In Progress"},{"type":"Confluence","text":"Sprint notes updated"}],"blockers":2,"velocity":24,"riskCount":1},
+  {"key":"PRJ2","name":"Zephyr","health":61,"milestones":["P1"],"workload":{"dana":11,"erin":3},"recent":[{"type":"Jira","text":"ISSUE-22 blocked"},{"type":"Confluence","text":"Spec v2 published"}],"blockers":3,"velocity":18,"riskCount":3}
+]

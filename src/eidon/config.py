@@ -1,84 +1,117 @@
 from __future__ import annotations
 
-import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional, Any
+import os
 
-import tomllib
+try:
+    import tomllib  # Python 3.11+
+except ModuleNotFoundError:  # pragma: no cover
+    import tomli as tomllib  # type: ignore
 
-ENV_PREFIX = "EIDON_"
 
-DEFAULTS: Dict[str, str] = {
-    "default_name": "World",
-    "log_level": "WARNING",  # keep CLI quiet by default
-}
-
-@dataclass(frozen=True)
+@dataclass
 class Config:
-    values: Dict[str, str]
-    sources: Dict[str, str]  # e.g., "env:EIDON_LOG_LEVEL" or "project:/path/eidon.toml"
+    default_name: str = "World"
+    log_level: Optional[str] = None  # e.g., "INFO", "DEBUG"
 
-def _read_toml(path: Path) -> Dict[str, str]:
-    if not path.exists():
-        return {}
+
+def _read_toml(path: Path) -> Dict[str, Any]:
     with path.open("rb") as f:
-        data = tomllib.load(f)
+        return tomllib.load(f)
 
-    section = data.get("eidon", data) if isinstance(data, dict) else {}
-    out: Dict[str, str] = {}
-    if isinstance(section, dict):
-        if isinstance(section.get("default_name"), str):
-            out["default_name"] = section["default_name"]
-        if isinstance(section.get("log_level"), str):
-            out["log_level"] = section["log_level"]
-    return out
+
+def _find_name_recursive(mapping: Dict[str, Any]) -> Optional[str]:
+    """
+    Recursively search for a string value under keys 'default_name' or 'name'
+    anywhere in the mapping (top-level or nested tables).
+    """
+    # direct keys first
+    for key in ("default_name", "name"):
+        val = mapping.get(key)
+        if isinstance(val, str):
+            return val
+    # then nested tables
+    for v in mapping.values():
+        if isinstance(v, dict):
+            found = _find_name_recursive(v)
+            if isinstance(found, str):
+                return found
+    return None
+
+
+def _apply_from_mapping(cfg: Config, sources: Dict[str, str], mapping: Dict[str, Any], label: str) -> None:
+    nm = _find_name_recursive(mapping)
+    if isinstance(nm, str):
+        cfg.default_name = nm
+        sources["default_name"] = label
+
+    # logging.level either top-level "log_level" or table [logging].level (string)
+    if isinstance(mapping.get("log_level"), str):
+        cfg.log_level = mapping["log_level"].upper()
+        sources["log_level"] = label
+
+    logging_tbl = mapping.get("logging")
+    if isinstance(logging_tbl, dict):
+        level = logging_tbl.get("level")
+        if isinstance(level, str):
+            cfg.log_level = level.upper()
+            sources["log_level"] = label
+
 
 def _user_config_path() -> Path:
+    xdg = os.getenv("XDG_CONFIG_HOME")
+    if xdg:
+        return Path(xdg) / "eidon" / "config.toml"
     return Path.home() / ".config" / "eidon" / "config.toml"
 
-def _project_config_path(cwd: Path | None = None) -> Path:
-    base = cwd or Path.cwd()
-    return base / "eidon.toml"
 
-def _load_env() -> Tuple[Dict[str, str], Dict[str, str]]:
-    vals: Dict[str, str] = {}
-    srcs: Dict[str, str] = {}
-    mapping = {
-        "default_name": f"{ENV_PREFIX}DEFAULT_NAME",
-        "log_level": f"{ENV_PREFIX}LOG_LEVEL",
-    }
-    for key, env_key in mapping.items():
-        val = os.environ.get(env_key)
-        if val:
-            vals[key] = val
-            srcs[key] = f"env:{env_key}"
-    return vals, srcs
+def _project_config_path() -> Path:
+    return Path.cwd() / "eidon.toml"
 
-def load_config(config_path: str | None = None) -> Config:
-    values: Dict[str, str] = dict(DEFAULTS)
-    sources: Dict[str, str] = {k: "default" for k in DEFAULTS.keys()}
 
-    # User config
-    user_path = _user_config_path()
-    user_vals = _read_toml(user_path)
-    for k, v in user_vals.items():
-        values[k] = v
-        sources[k] = f"user:{user_path}"
+def load_config(override_path: Optional[str] = None) -> Tuple[Config, Dict[str, str]]:
+    """
+    Precedence:
+    defaults < user < project < override file < env
+    (CLI flags are handled in cli.py and beat all of these.)
+    """
+    cfg = Config()
+    sources: Dict[str, str] = {"default_name": "default", "log_level": "default"}
 
-    # Project config
-    project_path = _project_config_path()
-    if config_path:
-        project_path = Path(config_path)
-    proj_vals = _read_toml(project_path)
-    for k, v in proj_vals.items():
-        values[k] = v
-        sources[k] = f"project:{project_path}"
+    # user
+    u = _user_config_path()
+    if u.exists():
+        try:
+            _apply_from_mapping(cfg, sources, _read_toml(u), "user")
+        except Exception:
+            pass
 
-    # Env overrides
-    env_vals, env_srcs = _load_env()
-    for k, v in env_vals.items():
-        values[k] = v
-        sources[k] = env_srcs[k]
+    # project
+    p = _project_config_path()
+    if p.exists():
+        try:
+            _apply_from_mapping(cfg, sources, _read_toml(p), "project")
+        except Exception:
+            pass
 
-    return Config(values=values, sources=sources)
+    # explicit override file
+    if override_path:
+        op = Path(override_path)
+        if op.exists():
+            try:
+                _apply_from_mapping(cfg, sources, _read_toml(op), f"override:{op}")
+            except Exception:
+                pass
+
+    # env (highest among config sources)
+    if "EIDON_DEFAULT_NAME" in os.environ:
+        cfg.default_name = os.environ["EIDON_DEFAULT_NAME"]
+        sources["default_name"] = "env:EIDON_DEFAULT_NAME"
+
+    if "EIDON_LOG_LEVEL" in os.environ:
+        cfg.log_level = os.environ["EIDON_LOG_LEVEL"].upper()
+        sources["log_level"] = "env:EIDON_LOG_LEVEL"
+
+    return cfg, sources

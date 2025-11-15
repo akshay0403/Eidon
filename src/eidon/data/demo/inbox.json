@@ -1,0 +1,4 @@
+[
+  {"type": "approval", "text": "Approve Sprint 14 scope change", "project_id": "P-1002"},
+  {"type": "alert",    "text": "Risk raised: Vendor schedule slip", "project_id": "P-1003"}
+]

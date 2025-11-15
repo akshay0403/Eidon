@@ -1,0 +1,7 @@
+{
+  "risks": [
+    {"project_id": "P-1003", "title": "Vendor schedule slip", "impact": "High", "likelihood": "Medium", "status": "Open"},
+    {"project_id": "P-1002", "title": "Auth rate limits",     "impact": "Medium", "likelihood": "High", "status": "Open"},
+    {"project_id": "P-1001", "title": "Design sign-off delays","impact": "Low", "likelihood": "Low", "status": "Closed"}
+  ]
+}

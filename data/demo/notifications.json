@@ -1,0 +1,7 @@
+{
+  "digest":{"risks":2,"blockers":3,"updates":5},
+  "items":[
+    {"type":"Approval","text":"Approve PR #123?","project":"Apollo"},
+    {"type":"Review","text":"Review spec v2","project":"Zephyr"}
+  ]
+}

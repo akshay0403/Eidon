@@ -1,0 +1,24 @@
+{
+  "sprints": [
+    {
+      "project_id": "P-1002",
+      "name": "Sprint 14",
+      "goal": "Checkout refactor",
+      "velocity": 28,
+      "complete": 1.0,
+      "planned_end": "2025-11-10",
+      "actual_end":  "2025-11-09",
+      "status": "Done"
+    },
+    {
+      "project_id": "P-1002",
+      "name": "Sprint 15",
+      "goal": "Push notifications",
+      "velocity": 30,
+      "complete": 0.2,
+      "planned_end": "2025-11-24",
+      "forecast_end":"2025-11-26",
+      "status": "In Progress"
+    }
+  ]
+}

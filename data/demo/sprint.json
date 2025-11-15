@@ -1,0 +1,12 @@
+{
+  "name":"Sprint 14",
+  "daysRemaining":5,
+  "burndown":[30,27,24,20,18,15,12],
+  "capacity":26,
+  "suggestedScope":[
+    {"key":"ISSUE-101","title":"Auth hardening","wsjf":32},
+    {"key":"ISSUE-99","title":"Cache tuning","wsjf":29},
+    {"key":"ISSUE-97","title":"Onboarding polish","wsjf":22}
+  ],
+  "blocked":[{"key":"ISSUE-88","owner":"bob","title":"Payment webhook failing"}]
+}
